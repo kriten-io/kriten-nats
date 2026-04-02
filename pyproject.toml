@@ -1,0 +1,10 @@
+[project]
+name = "kriten-nats"
+version = "0.1"
+description = "Start Kriten jobs with NATS"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "asyncio>=4.0.0",
+    "nats-py>=2.14.0",
+]
