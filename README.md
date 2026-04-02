@@ -1,12 +1,25 @@
 # kriten-nats
 Run Kriten jobs via NATS
 
-## Install
+### requester.py
+Put messages on the NATs queue kriten.job.requests
+The message contains kriten task name and any optional arguments.
 
-export NATS_HOST="nats.192.168.10.190.nip.io"
-export NATS_PORT="30222"
-export KRITEN_URL="http://kriten-dev.192.168.10.190.nip.io"
-export KRITEN_API_TOKEN="kri_Rnx8Pvr2jBalEjvfwA4nIHUhI8lIUGHIK5zH"
+### responder.py
+Subscribes to kriten.job.requests and launches the kriten jobs.
+Returns job id to the requester.
+Posts job result to kriten.job.results
+
+### results.py
+Subscribes to kriten.job.results and prints job stdout.
+
+## Install
+```
+export NATS_HOST=<host where NATS is running>
+export NATS_PORT=<NATs port>
+export KRITEN_URL=<kriten URL>
+export KRITEN_API_TOKEN=<kriten API token>
+```
 
 ## Start results subscriber
 This subscribes to 'kriten.job.results' and prints messages.
