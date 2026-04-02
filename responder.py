@@ -28,12 +28,12 @@ async def request_handler(msg: Msg) -> None:
         # if ":" in request:
         async with session.post(kriten_launch_url, json=payload, headers=KRITEN_HEADERS) as response:
             data = await response.json()
-            print("Received response from Kriten:", data)
+            print("Received response from Kriten:", data, flush=True)
             # Send job id back to requester
             await msg.respond(json.dumps(data).encode("utf-8"))
             error = data.get('error')
             if error:
-                print(f"Kriten error: {error}")
+                print(f"Kriten error: {error}", flush=True)
                 result = error
             else:
                 job_id = data.get('id')
@@ -48,9 +48,9 @@ async def request_handler(msg: Msg) -> None:
                         completed = result.get("completed")
                         failed = result.get("failed")
                 if completed:
-                    print(f"Kriten job id: {job_id} completed.")
+                    print(f"Kriten job id: {job_id} completed.", flush=True)
                 else:
-                    print(f"Kriten job id: {job_id} failed.")
+                    print(f"Kriten job id: {job_id} failed.", flush=True)
         await nats.publish("kriten.job.results", json.dumps(result).encode())
 
 
@@ -60,7 +60,7 @@ async def run() -> None:
     # Subscribe to the requests subject
     subject = "kriten.job.requests"
     await nats.subscribe(subject, cb=request_handler)
-    print(f"Subscribed to '{subject}'")
+    print(f"Subscribed to '{subject}'", flush=True)
     while True:
         await asyncio.sleep(1)
 
@@ -71,13 +71,13 @@ if __name__ == "__main__":
     KRITEN_API_TOKEN = os.getenv("KRITEN_API_TOKEN")
 
     if not NATS_HOST:
-        print("Environment variable NATS_HOST not set.")
+        print("Environment variable NATS_HOST not set.", flush=True)
     if not NATS_PORT:
-        print("Environment variable NATS_PORT not set.")
+        print("Environment variable NATS_PORT not set.", flush=True)
     if not KRITEN_URL:
-        print("Environment variable KRITEN_URL not set.")
+        print("Environment variable KRITEN_URL not set.", flush=True)
     if not KRITEN_API_TOKEN:
-        print("Environment variable KRITEN_API_TOKEN not set.")
+        print("Environment variable KRITEN_API_TOKEN not set.", flush=True)
     if not NATS_HOST or not NATS_PORT or not KRITEN_URL or not KRITEN_API_TOKEN:
         sys.exit()
 
